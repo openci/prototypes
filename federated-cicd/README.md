@@ -207,7 +207,7 @@ with relatively higher confidence.
 ## Event Types and the Metadata to Use for the Prototype
 
 In order to bring up this prototype and have something realistic enough, 3 different event types
-are defined. These event types are
+to be used during this work are defined. These event types are
 
 * ArtifactCreated
 * BaselineDefined
@@ -219,20 +219,22 @@ Apart from the event types, certain key/value pairs need to be included in all e
 * eventTime: The time which the event was generated to be published ("EVENT_TIME": "12:34:56UTC")
 * buildUrl: The url to build which this event is published by ("BUILD_URL": "https://url/to/build/#")
 
-Apart from the common metadata, events have additional metadata depending on their types.
-For ArtifactCreated event, the key/value pairs are
+In addition to common key/value pairs, The events have additional metadata depending on their types
+as can be seen below.
+
+**ArtifactCreated event**
 
 * artifactUrl: The url pointing to the location on artifact repository ("ARTIFACT_URL": "https://url/to/artifact")
 * projectBranch: The branch the artifact is built for. ("PROJECT_BRANCH": "master")
 * confidenceLevel: The confidence level (quality stamp) the artifact gained ("AUTORELEASE": "SUCCESS") The value can be Jenkins build result.
 
-For BaselineDefined event, the key/value pairs are
+**BaselineDefined event**
 
 * baselineName: The name of the baseline that's defined. ("BASELINE_NAME": "os-odl-nofeature")
 * baselineUrl: The prototype will keep the baseline information in text files and this url points to that location ("BASELINE_URL": "https://url/to/baseline")
 * consistsOf: What this baseline contains ("CONSIST_OF": "opendaylight-master-1.2.3,openstack-master-17.18.19")
 
-For ConfidenceLevel event, the key/value pairs are
+**ConfidenceLevelModified event**
 
 * baselineName: The name of the baseline that's defined. ("BASELINE_NAME": "os-odl-nofeature")
 * baselineUrl: The prototype will keep the baseline information in text files and this url points to that location ("BASELINE_URL": "https://url/to/baseline")
