@@ -24,10 +24,8 @@ Options:
   -U <user>, --user=<user>  Username for the connection
   -p <password>, --password=<password>
                             Password for the connection
-  -s <subscription_type>, --subscription_type=<subscription_type>
-                            Type of subscription, can be topic or queue.
-                            [default='topic']
-  -n <subscription_name>, --subscription_name=<subscription_name>
+  -t <type>, --type=<type>  Set the subscription type (topic or queue). [default: topic]
+  -n <name>, --name=<subscription_name>
                             Name of topic or queue where to subscribe.
   -S <protocol_version>, --protocol=<protocol_version>
                             Set the STOMP protocol version. [default: 1.1]
@@ -48,11 +46,11 @@ version_string = '%s.%s.%s' % __version__
 def main():
     arguments = docopt(__doc__, version=version_string)
 
-    if arguments['--subscription_type'] not in ('topic', 'queue'):
+    if arguments['--type'] not in ('topic', 'queue'):
         print("Subscription type can only be 'topic' or 'queue'.")
         sys.exit(1)
 
-    if arguments['--subscription_name'] is None:
+    if arguments['--name'] is None:
         print("Please specify the subscription name to connect.")
         sys.exit(1)
 
@@ -62,8 +60,8 @@ def main():
                            arguments['--user'], arguments['--password'],
                            arguments['--protocol'], use_ssl,
                            arguments['--body'],
-                           arguments['--subscription_type'],
-                           arguments['--subscription_name'])
+                           arguments['--type'],
+                           arguments['--name'])
 
 if __name__ == '__main__':
     try:

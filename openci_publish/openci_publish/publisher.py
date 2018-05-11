@@ -30,6 +30,33 @@ class OpenCIListener(stomp.ConnectionListener):
     def on_disconnected(self):
         connect_and_subscribe(self.conn)
 
+MANDATORY_FIELDS = [ 'type', 'id', 'time', 'buildUrl', 'branch' ]
+TYPES_SCHEMA = {
+    'ArtifactPublishedEvent': [ 'artifactLocation', 'confidenceLevel' ],
+    'CompositionDefinedEvent': [ 'compositionName', 'compositionMetadataUrl' ],
+    'ConfidenceLevelModifiedEvent': [ 'compositionName',
+                                      'compositionMetadataUrl',
+                                      'confidenceLevel' ]
+}
+# validates passed json
+def validate_json_message(json_body):
+    # first we validate type
+    if 'type' not in json_body or json_body['type'] not in TYPES_SCHEMA.keys():
+        return False, ('You must provide a valid type (%s)' %
+                       ', '.join(valid_types))
+
+    # now validate that we have the mandatory fields depending on the type
+    missing_fields = []
+    for field in MANDATORY_FIELDS + TYPES_SCHEMA[json_body['type']]:
+        if field not in json_body:
+            missing_fields.append(field)
+
+    if missing_fields:
+        return False, "Missing mandatory field(s): %s" % (', '.
+                                                          join(missing_fields))
+
+    return True, ''
+
 def send_message(host='localhost', port=61613, user='', password='', ver='1.1',
                  use_ssl=False,  body='', subscription_type='topic',
                  subscription_name=''):
@@ -39,6 +66,11 @@ def send_message(host='localhost', port=61613, user='', password='', ver='1.1',
         json_body = json.loads(body)
     except:
         print("Invalid body provided, needs to be a JSON file")
+        sys.exit(1)
+
+    result, error_message = validate_json_message(json_body)
+    if not result:
+        print("Validation error: %s" % error_message)
         sys.exit(1)
 
     try:
