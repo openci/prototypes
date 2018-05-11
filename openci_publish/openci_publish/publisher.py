@@ -13,6 +13,7 @@
 # limitations under the License.
 
 # sends a message to the message broker provider. It relies on STOMP protocol
+import json
 import stomp
 import sys
 
@@ -30,8 +31,16 @@ class OpenCIListener(stomp.ConnectionListener):
         connect_and_subscribe(self.conn)
 
 def send_message(host='localhost', port=61613, user='', password='', ver='1.1',
-                 use_ssl=False, type='', body='', subscription_type='topic',
+                 use_ssl=False,  body='', subscription_type='topic',
                  subscription_name=''):
+
+    # before connecting, validate that the message is valid
+    try:
+        json_body = json.loads(body)
+    except:
+        print("Invalid body provided, needs to be a JSON file")
+        sys.exit(1)
+
     try:
         # establish the right stomp connection
         if ver == '1.0':

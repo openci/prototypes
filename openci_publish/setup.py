@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from setuptools import setup
+
 setup(
     name='openci_publish',
     version='1.0.0',

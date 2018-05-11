@@ -18,7 +18,7 @@ openci_publish command-line client
 Usage: openci_publish [options]
 
 Options:
-  -h, --help Show this help message and exit
+  -h, --help                Show this help message and exit
   -H <host>, --host=<host>  Hostname or IP address to connect to. [default: localhost]
   -P <port>, --port=<port>  Port providing stomp protocol connections. [default: 61613]
   -U <user>, --user=<user>  Username for the connection
@@ -32,7 +32,6 @@ Options:
   -S <protocol_version>, --protocol=<protocol_version>
                             Set the STOMP protocol version. [default: 1.1]
   -ssl                      Enable SSL connection
-  -t, --type=<event_type>   Event type to publish
   -b, --body=<event_body>   JSON blob with the message body to publish
 """
 
@@ -49,10 +48,6 @@ version_string = '%s.%s.%s' % __version__
 def main():
     arguments = docopt(__doc__, version=version_string)
 
-    if arguments['--type'] is None or arguments['--body'] is None:
-        print("Please send type and body for publishing the message.")
-        sys.exit(1)
-
     if arguments['--subscription_type'] not in ('topic', 'queue'):
         print("Subscription type can only be 'topic' or 'queue'.")
         sys.exit(1)
@@ -66,7 +61,7 @@ def main():
     publisher.send_message(arguments['--host'], arguments['--port'],
                            arguments['--user'], arguments['--password'],
                            arguments['--protocol'], use_ssl,
-                           arguments['--type'], arguments['--body'],
+                           arguments['--body'],
                            arguments['--subscription_type'],
                            arguments['--subscription_name'])
 
@@ -74,4 +69,4 @@ if __name__ == '__main__':
     try:
         main()
     except:
-        pass()
+        pass
