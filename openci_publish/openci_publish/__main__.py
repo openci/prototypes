@@ -47,7 +47,8 @@ from openci_publish import publisher
 
 __version__ = (1, 0, 0)
 version_string = '%s.%s.%s' % __version__
-MANDATORY_CONFIG_ARGUMENTS = [ 'host', 'user', 'password' ]
+MANDATORY_CONFIG_ARGUMENTS = [ 'host', 'user', 'password', 'name' ]
+OPTIONAL_CONFIG_ARGUMENTS = [ 'port', 'type' ]
 
 def main():
     arguments = docopt(__doc__, version=version_string)
@@ -66,6 +67,12 @@ def main():
                 if not parser.has_option('default', argument):
                     print("Missing setting '%s' on config file" % argument)
                     sys.exit(1)
+                arguments['--%s' % argument ] = parser.get('default', argument)
+
+            for argument in OPTIONAL_CONFIG_ARGUMENTS:
+                if parser.has_option('default', argument):
+                    arguments['--%s' % argument ] = parser.get(default,
+                                                               argument)
 
         except Exception as e:
             print(str(e))
@@ -76,6 +83,10 @@ def main():
 
     if arguments['--name'] is None:
         print("Please specify the subscription name to connect.")
+        sys.exit(1)
+
+    if arguments['--body'] is None:
+        print("Please specify the body to send.")
         sys.exit(1)
 
     use_ssl = ('--ssl' in arguments)

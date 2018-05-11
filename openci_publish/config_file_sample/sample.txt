@@ -1,2 +1,5 @@
 [default]
 host=127.0.0.1
+user=openci
+password=*****
+name=openci.sample_topic
