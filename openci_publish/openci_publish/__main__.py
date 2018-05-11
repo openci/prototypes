@@ -31,20 +31,44 @@ Options:
                             Set the STOMP protocol version. [default: 1.1]
   -ssl                      Enable SSL connection
   -b, --body=<event_body>   JSON blob with the message body to publish
+  -c <config_file>, --config_file=<config_file>
+                            Accepts the path for a config file, that will
+                            contain all the connection options
 """
 
+import os.path
 import stomp
 import sys
 import time
 
+from ConfigParser import SafeConfigParser
 from docopt import docopt
 from openci_publish import publisher
 
 __version__ = (1, 0, 0)
 version_string = '%s.%s.%s' % __version__
+MANDATORY_CONFIG_ARGUMENTS = [ 'host', 'user', 'password' ]
 
 def main():
     arguments = docopt(__doc__, version=version_string)
+
+    if '--config_file' in arguments:
+        # read all the connection arguments from there
+        if not os.path.isfile(arguments['--config_file']):
+            print("Cannot find the config file '%s'" %
+                  arguments["--config_file"])
+            sys.exit(1)
+
+        try:
+            parser = SafeConfigParser()
+            parser.read(arguments['--config_file'])
+            for argument in MANDATORY_CONFIG_ARGUMENTS:
+                if not parser.has_option('default', argument):
+                    print("Missing setting '%s' on config file" % argument)
+                    sys.exit(1)
+
+        except Exception as e:
+            print(str(e))
 
     if arguments['--type'] not in ('topic', 'queue'):
         print("Subscription type can only be 'topic' or 'queue'.")
