@@ -43,7 +43,7 @@ def validate_json_message(json_body):
     # first we validate type
     if 'type' not in json_body or json_body['type'] not in TYPES_SCHEMA.keys():
         return False, ('You must provide a valid type (%s)' %
-                       ', '.join(valid_types))
+                       ', '.join(TYPES_SCHEMA.keys()))
 
     # now validate that we have the mandatory fields depending on the type
     missing_fields = []
