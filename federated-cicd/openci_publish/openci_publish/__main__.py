@@ -31,6 +31,10 @@ Options:
                             Set the STOMP protocol version. [default: 1.1]
   -ssl                      Enable SSL connection
   -b, --body=<event_body>   JSON blob with the message body to publish
+  -B, --body_file=<event_body_file>
+                            Path to a file containing the event body, that
+                            will contain a JSON blob with the message to
+                            publish
   -c <config_file>, --config_file=<config_file>
                             Accepts the path for a config file, that will
                             contain all the connection options
@@ -85,9 +89,22 @@ def main():
         print("Please specify the subscription name to connect.")
         sys.exit(1)
 
-    if arguments['--body'] is None:
+    if arguments['--body'] is None and arguments['--body_file'] is None:
         print("Please specify the body to send.")
         sys.exit(1)
+
+    if arguments['--body'] and arguments['--body_file']:
+        print("Please just specify one of the following: body or body_file.")
+        sys.exit(1)
+
+    # if body_file is provided, open it and extract the content
+    if arguments['--body_file']:
+        if not os.path.isfile(arguments['--body_file']):
+            print("Error, the file to extract the body %s does not exist." %
+                  arguments['--body_file'])
+            sys.exit(1)
+        with open(arguments['--body_file']) as f:
+            arguments['--body'] = f.read()
 
     use_ssl = ('--ssl' in arguments)
 
