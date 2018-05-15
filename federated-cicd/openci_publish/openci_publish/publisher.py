@@ -25,6 +25,9 @@ class OpenCIListener(stomp.ConnectionListener):
         pass
 
     def on_message(self, headers, message):
+        print("on message")
+        print(headers)
+        print(message)
         pass
 
     def on_disconnected(self):
@@ -92,10 +95,10 @@ def send_message(host='localhost', port=61613, user='', password='', ver='1.1',
 
         # connect and send message
         conn.connect(user, password, wait=True)
-
         txid = conn.begin()
         conn.send(destination='/%s/%s' % (subscription_type, subscription_name),
-                  body=body, transaction=txid)
+                  body=body, headers={'JMSType': json_body['type']},
+                  transaction=txid)
         conn.commit(txid)
         conn.disconnect()
     except Exception as e:
