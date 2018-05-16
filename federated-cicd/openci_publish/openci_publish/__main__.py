@@ -57,7 +57,7 @@ OPTIONAL_CONFIG_ARGUMENTS = [ 'port', 'type' ]
 def main():
     arguments = docopt(__doc__, version=version_string)
 
-    if '--config_file' in arguments:
+    if arguments['--config_file']:
         # read all the connection arguments from there
         if not os.path.isfile(arguments['--config_file']):
             print("Cannot find the config file '%s'" %
