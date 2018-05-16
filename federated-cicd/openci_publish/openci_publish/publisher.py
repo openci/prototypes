@@ -18,20 +18,21 @@ import stomp
 import sys
 
 class OpenCIListener(stomp.ConnectionListener):
-    def __init__(self, conn):
+    def __init__(self, conn, user, password):
         self.conn = conn
+        self.user = user
+        self.password = password
 
     def on_error(self, headers, message):
         pass
 
     def on_message(self, headers, message):
-        print("on message")
-        print(headers)
-        print(message)
         pass
 
     def on_disconnected(self):
-        connect_and_subscribe(self.conn)
+        self.conn.start()
+        self.conn.connect(self.user, self.password, wait=True)
+
 
 MANDATORY_FIELDS = [ 'type', 'id', 'time', 'buildUrl', 'branch' ]
 TYPES_SCHEMA = {
@@ -90,7 +91,7 @@ def send_message(host='localhost', port=61613, user='', password='', ver='1.1',
         if use_ssl:
             conn.set_ssl([(host, port)])
 
-        conn.set_listener('', OpenCIListener(conn))
+        conn.set_listener('', OpenCIListener(conn, user, password))
         conn.start()
 
         # connect and send message
