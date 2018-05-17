@@ -2,6 +2,7 @@
     "type": "ArtifactPublishedEvent",
     "id": "bef7bb67-c8bc-40f1-95d7-3704b23bfbf4",
     "time": "12:34:56UTC",
+    "origin": "ODL",
     "buildUrl": "https://url/to/build/#",
     "branch": "master",
     "artifactLocation": "https://url/to/artifact",
