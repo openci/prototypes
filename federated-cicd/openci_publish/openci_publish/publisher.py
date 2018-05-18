@@ -34,7 +34,7 @@ class OpenCIListener(stomp.ConnectionListener):
         self.conn.connect(self.user, self.password, wait=True)
 
 
-MANDATORY_FIELDS = [ 'type', 'id', 'time', 'buildUrl', 'branch' ]
+MANDATORY_FIELDS = [ 'type', 'id', 'time', 'buildUrl', 'branch', 'origin' ]
 TYPES_SCHEMA = {
     'ArtifactPublishedEvent': [ 'artifactLocation', 'confidenceLevel' ],
     'CompositionDefinedEvent': [ 'compositionName', 'compositionMetadataUrl' ],
@@ -98,7 +98,8 @@ def send_message(host='localhost', port=61613, user='', password='', ver='1.1',
         conn.connect(user, password, wait=True)
         txid = conn.begin()
         conn.send(destination='/%s/%s' % (subscription_type, subscription_name),
-                  body=body, headers={'JMSType': json_body['type']},
+                  body=body, headers={'JMSType': json_body['type'],
+                                      'JMSOrigin': json_body['origin']},
                   transaction=txid)
         conn.commit(txid)
         conn.disconnect()
