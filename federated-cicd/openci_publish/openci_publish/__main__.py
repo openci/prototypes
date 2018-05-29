@@ -79,7 +79,7 @@ def main():
                                                                argument)
 
         except Exception as e:
-            print(str(e))
+            print("Error opening config file: %s" % str(e))
 
     if arguments['--type'] not in ('topic', 'queue'):
         print("Subscription type can only be 'topic' or 'queue'.")

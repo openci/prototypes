@@ -104,5 +104,4 @@ def send_message(host='localhost', port=61613, user='', password='', ver='1.1',
         conn.commit(txid)
         conn.disconnect()
     except Exception as e:
-        print("There has been an error processing your message: %s" % str(e))
-        sys.exit(1)
+        print("Error connecting to broker: %s" % str(e))
