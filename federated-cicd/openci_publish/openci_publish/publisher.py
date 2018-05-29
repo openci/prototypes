@@ -30,8 +30,7 @@ class OpenCIListener(stomp.ConnectionListener):
         pass
 
     def on_disconnected(self):
-        self.conn.start()
-        self.conn.connect(self.user, self.password, wait=True)
+        pass
 
 
 MANDATORY_FIELDS = [ 'type', 'id', 'time', 'buildUrl', 'branch', 'origin' ]
@@ -105,3 +104,5 @@ def send_message(host='localhost', port=61613, user='', password='', ver='1.1',
         conn.disconnect()
     except Exception as e:
         print("Error connecting to broker: %s" % str(e))
+        sys.exit(1)
+    print("finish")
