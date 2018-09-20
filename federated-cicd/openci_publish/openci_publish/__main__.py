@@ -54,7 +54,7 @@ version_string = '%s.%s.%s' % __version__
 MANDATORY_CONFIG_ARGUMENTS = [ 'host', 'user', 'password', 'name' ]
 OPTIONAL_CONFIG_ARGUMENTS = [ 'port', 'type' ]
 
-def main():
+def main(argv):
     arguments = docopt(__doc__, version=version_string)
 
     if arguments['--config_file']:
@@ -116,7 +116,4 @@ def main():
                            arguments['--name'])
 
 if __name__ == '__main__':
-    try:
-        main()
-    except:
-        pass
+    sys.exit(main(sys.argv))
